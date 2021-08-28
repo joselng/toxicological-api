@@ -1,10 +1,11 @@
-import mongoose from 'mongoose'
+import 'reflect-metadata'
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
+import { createConnection } from 'typeorm'
 import 'express-async-errors'
 
-import appConfig from './config/app'
-import AppError from './errors/AppError'
+import appConfig from './app/config/app'
+import AppError from './app/errors/AppError'
 import routes from './routes'
 
 class App {
@@ -33,7 +34,7 @@ class App {
         console.error(error)
         return response.status(500).json({
           status: 'error',
-          message: 'Internal Server Error'
+          message: 'Erro interno no servidor'
         })
       }
     )
@@ -45,14 +46,12 @@ class App {
   }
 
   private async database (): Promise<void> {
-    await mongoose.connect(process.env.DB_HOST)
-      .then(() => {
-        return console.info('MongoDB Atlas - Conectado com sucesso!')
-      })
-      .catch(error => {
-        console.error('Erro ao conectar com banco de dados: ', error)
-        return process.exit(1)
-      })
+    try {
+      const connection = await createConnection()
+      connection.runMigrations()
+    } catch (error) {
+      console.error('Erro ao conectar com banco de dados', error)
+    }
   }
 
   private routes (): void {

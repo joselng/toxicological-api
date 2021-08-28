@@ -1,10 +1,11 @@
 import { Router } from 'express'
 
-import UserController from '../controllers/user.controller'
+import usersRoutes from '../modules/users/routes'
+import samplesRoutes from '../modules/samples/routes'
 
 const routes = Router()
-const userController = new UserController()
 
-routes.post('/users', userController.create)
+routes.use(usersRoutes)
+routes.use(samplesRoutes)
 
 export default routes

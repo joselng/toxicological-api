@@ -1,4 +1,4 @@
-import appConfig from './config/app'
+import appConfig from './app/config/app'
 import app from './app'
 
 const { environment, port } = appConfig
