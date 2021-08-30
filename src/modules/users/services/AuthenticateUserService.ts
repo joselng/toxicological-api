@@ -2,14 +2,14 @@ import { sign } from 'jsonwebtoken'
 import bcryptjs from 'bcryptjs'
 
 import authConfig from '../../../app/config/auth'
-import { AppError } from 'app/errors/AppError'
+import { AppError } from '../../../app/errors/AppError'
 import { User } from '../entities/User'
 
-import { UserRepository } from '../repositories/UserRepository'
+import { IUserRepository } from '../repositories/IUserRepository'
 
 interface Request {
   email: string;
-  password?: string;
+  password: string;
 }
 
 interface Response {
@@ -18,9 +18,9 @@ interface Response {
 }
 
 export class AuthenticateUserService {
-  private userRepository: UserRepository
+  private userRepository: IUserRepository
 
-  constructor (userRepository: UserRepository) {
+  constructor (userRepository: IUserRepository) {
     this.userRepository = userRepository
   }
 

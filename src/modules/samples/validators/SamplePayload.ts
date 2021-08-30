@@ -10,7 +10,7 @@ export const ValidateSamplePayload = async (
   await yup
     .object()
     .shape({
-      code: yup.string().length(8).required(),
+      code: yup.string().max(8).required(),
       cocaine: yup.number().required(),
       amphetamine: yup.number().required(),
       methamphetamine: yup.number().required(),

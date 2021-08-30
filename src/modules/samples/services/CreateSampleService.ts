@@ -1,6 +1,7 @@
 import { ISampleRepository } from '../repositories/ISampleRepository'
-import { SampleDTO } from '../dtos/SampleDTO'
-import { AppError } from 'app/errors/AppError'
+import { CreateSampleDTO } from '../dtos/CreateSampleDTO'
+
+import { AppError } from '../../../app/errors/AppError'
 
 export class CreateSampleService {
   private sampleRepository: ISampleRepository
@@ -23,26 +24,31 @@ export class CreateSampleService {
     benzoylecgonine,
     cocaethylene,
     norcocaine
-  }: SampleDTO) {
-    try {
-      this.sampleRepository.create({
-        code,
-        cocaine,
-        amphetamine,
-        methamphetamine,
-        mda,
-        mdma,
-        thc,
-        morphine,
-        codeine,
-        heroin,
-        benzoylecgonine,
-        cocaethylene,
-        norcocaine
-      })
-    } catch (err) {
-      console.log(err)
-      throw new AppError('Ocorreu um erro ao cadastrar a amostra.')
+  }: CreateSampleDTO) {
+    const checkCodeSampleExists = await this.sampleRepository.findByCode(code)
+
+    if (checkCodeSampleExists) {
+      throw new AppError('Esta amostra já está cadastrada.')
     }
+
+    const sample = {
+      code,
+      cocaine,
+      amphetamine,
+      methamphetamine,
+      mda,
+      mdma,
+      thc,
+      morphine,
+      codeine,
+      heroin,
+      benzoylecgonine,
+      cocaethylene,
+      norcocaine
+    }
+
+    await this.sampleRepository.create(sample)
+
+    return sample
   }
 }

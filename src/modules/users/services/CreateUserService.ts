@@ -1,8 +1,8 @@
 import bcryptjs from 'bcryptjs'
-import { AppError } from 'app/errors/AppError'
+import { AppError } from '../../../app/errors/AppError'
 import { User } from '../entities/User'
 import { IUserRepository } from '../repositories/IUserRepository'
-import { UserDTO } from '../dtos/UserDTO'
+import { CreateUserDTO } from '../dtos/CreateUserDTO'
 
 export class CreateUserService {
   private userRepository: IUserRepository
@@ -11,7 +11,7 @@ export class CreateUserService {
     this.userRepository = userRepository
   }
 
-  public async execute ({ name, email, password }: UserDTO): Promise<User> {
+  public async execute ({ name, email, password }: CreateUserDTO): Promise<User> {
     const checkUserExists = await this.userRepository.findByEmail(email)
 
     if (checkUserExists) {

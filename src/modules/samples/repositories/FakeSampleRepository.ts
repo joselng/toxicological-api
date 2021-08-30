@@ -1,14 +1,12 @@
-import { getRepository, Repository } from 'typeorm'
-
 import { ISampleRepository } from './ISampleRepository'
 import { Sample } from '../entities/Sample'
 import { CreateSampleDTO } from '../dtos/CreateSampleDTO'
 
-export class SampleRepository implements ISampleRepository {
-  private ormRepository: Repository<Sample>;
+export class FakeSampleRepository implements ISampleRepository {
+  private samples: Sample[] = [];
 
   constructor () {
-    this.ormRepository = getRepository(Sample)
+    this.samples = []
   }
 
   public async create ({
@@ -26,7 +24,10 @@ export class SampleRepository implements ISampleRepository {
     cocaethylene,
     norcocaine
   }: CreateSampleDTO): Promise<Sample> {
-    const sample = this.ormRepository.create({
+    const sample = new Sample()
+
+    Object.assign(sample, {
+      id: Number(this.samples.length + 1),
       code,
       cocaine,
       amphetamine,
@@ -39,21 +40,26 @@ export class SampleRepository implements ISampleRepository {
       heroin,
       benzoylecgonine,
       cocaethylene,
-      norcocaine
+      norcocaine,
+      created_at: new Date()
     })
 
-    return this.ormRepository.save(sample)
+    this.samples.push(sample)
+
+    return sample
   }
 
   public async getAll (): Promise<Sample[]> {
-    return this.ormRepository.find()
+    return this.samples
   }
 
   public async findByCode (code: string): Promise<Sample> {
-    return this.ormRepository.findOne({ where: { code } })
+    return this.samples.find(sample => sample.code === code)
   }
 
   public async save (sample: Sample): Promise<Sample> {
-    return this.ormRepository.save(sample)
+    this.samples.push(sample)
+
+    return sample
   }
 }

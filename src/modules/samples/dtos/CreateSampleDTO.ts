@@ -1,4 +1,4 @@
-export interface SampleDTO {
+export interface CreateSampleDTO {
   code: string
   cocaine: number
   amphetamine: number

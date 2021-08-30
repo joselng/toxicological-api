@@ -5,7 +5,7 @@ import { createConnection } from 'typeorm'
 import 'express-async-errors'
 
 import appConfig from './app/config/app'
-import AppError from './app/errors/AppError'
+import { AppError } from './app/errors/AppError'
 import routes from './routes'
 
 class App {
