@@ -1,5 +1,5 @@
 export class AnalysisSampleService {
-  async execute (sample: Object) {
+  async execute (sample: any) {
     const reference = {
       cocaine: 0.5,
       amphetamine: 0.2,
@@ -10,9 +10,9 @@ export class AnalysisSampleService {
       morphine: 0.2,
       codeine: 0.2,
       heroin: 0.1
-    }
+    } as any
 
-    const result = [{ code: sample.code }]
+    const sampleResult = [{ code: sample.code }] as any
 
     for (const drug in reference) {
       if (drug in sample) {
@@ -22,8 +22,8 @@ export class AnalysisSampleService {
               (sample.benzoylecgonine >= 0.05 ||
               sample.norcocaine >= 0.05 ||
               sample.cocaethylene >= 0.05)) {
-              result.push({
-                cocaine: sample[drug],
+              sampleResult.push({
+                cocaine: sample.cocaine,
                 result: 'positive',
                 other: {
                   benzoylecgonine: sample.benzoylecgonine,
@@ -33,14 +33,14 @@ export class AnalysisSampleService {
               })
             }
           } else {
-            result.push({ [drug]: sample[drug], result: 'positive' })
+            sampleResult.push({ [drug]: sample[drug], result: 'positive' })
           }
         } else {
-          result.push({ [drug]: sample[drug], result: 'negative' })
+          sampleResult.push({ [drug]: sample[drug], result: 'negative' })
         }
       }
     }
 
-    return result
+    return sampleResult
   }
 }
